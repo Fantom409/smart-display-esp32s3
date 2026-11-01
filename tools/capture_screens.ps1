@@ -34,7 +34,7 @@ $was = [int]$status.mode
 # (mode, file name, seconds to wait — network modes need time for data)
 $modes = @(
     @(0, 'mode_clock', 4), @(1, 'mode_crypto', 25), @(2, 'mode_space', 3), @(3, 'mode_analog', 3),
-    @(4, 'mode_ping', 8), @(5, 'mode_cat', 4), @(6, 'mode_weather', 6), @(7, 'mode_markets', 30)
+    @(4, 'mode_ping', 8), @(5, 'mode_weather', 6), @(6, 'mode_markets', 30)
 )
 Write-Host 'Modes:'
 foreach ($m in $modes) { Set-Mode $m[0]; Start-Sleep $m[2]; Save-Screen $m[1] }

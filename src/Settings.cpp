@@ -23,7 +23,15 @@ void Settings::begin() {
     if (p.isKey("tz"))     d.tzHours = p.getInt("tz", 0);
     if (p.isKey("tzauto")) d.tzAuto  = p.getBool("tzauto", true);
     if (p.isKey("dst"))    d.dst     = p.getBool("dst", false);
-    if (p.isKey("dmode"))  d.mode    = p.getInt("dmode", MODE_NORMAL);
+    if (p.isKey("dmode2")) {
+        d.mode = p.getInt("dmode2", MODE_NORMAL);
+    } else if (p.isKey("dmode")) {
+        // Legacy IDs: 5 was the removed mode, 6/7 were Weather/Markets.
+        int oldMode = p.getInt("dmode", MODE_NORMAL);
+        if (oldMode >= 0 && oldMode < 5) d.mode = oldMode;
+        else if (oldMode == 6) d.mode = MODE_WEATHER;
+        else if (oldMode == 7) d.mode = MODE_MARKETS;
+    }
     p.end();
 
     sanitize(d);
@@ -64,7 +72,7 @@ void Settings::loop() {
         _modeDirtyAt = 0;
         Preferences p;
         p.begin(NS, false);
-        p.putInt("dmode", get().mode);
+        p.putInt("dmode2", get().mode);
         p.end();
     }
 }
@@ -102,7 +110,7 @@ void Settings::save(const SettingsData& d) {
     p.putInt("tz", d.tzHours);
     p.putBool("tzauto", d.tzAuto);
     p.putBool("dst", d.dst);
-    p.putInt("dmode", d.mode);
+    p.putInt("dmode2", d.mode);
     p.end();
 }
 

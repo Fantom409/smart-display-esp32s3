@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
 New-Item -ItemType Directory -Force $Dest | Out-Null
 
-$include = @('src', 'tools', 'docs', 'platformio.ini', 'README.md', 'CHANGELOG.md', 'LICENSE', '.gitignore')
+$include = @('src', 'tools', 'docs', 'platformio.ini', 'Dockerfile', 'compose.yaml', '.dockerignore', 'README.md', 'CHANGELOG.md', 'LICENSE', '.gitignore')
 foreach ($item in $include) {
     $src = Join-Path $root $item
     if (Test-Path $src) { Copy-Item $src -Destination $Dest -Recurse -Force }

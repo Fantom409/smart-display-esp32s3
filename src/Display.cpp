@@ -1,6 +1,5 @@
 #include "Display.h"
 #include "NetService.h"
-#include "CatMode.h"
 #include <TFT_eSPI.h>
 #include <PNGdec.h>
 #include <WiFi.h>
@@ -1099,15 +1098,9 @@ static void tickMarkets() {
     if (net.cryptoVersion() != st.cryptoVer) marketsRows();
 }
 
-// ================================================================ CAT
-
-static void catPush() {
-    fb.pushSprite(0, CAT_Y0, 0, CAT_Y0, W, CAT_Y1 - CAT_Y0);   // the hold bar is refreshed separately in tick()
-}
-
 // ================================================================ menu
 
-static const char* MODE_NAMES[MODE_COUNT] = {"CLOCK", "CRYPTO", "SPACE", "ANALOG", "PING", "CAT", "WEATHER", "MARKETS"};
+static const char* MODE_NAMES[MODE_COUNT] = {"CLOCK", "CRYPTO", "SPACE", "ANALOG", "PING", "WEATHER", "MARKETS"};
 
 // ================================================================ public
 
@@ -1203,12 +1196,6 @@ void Display::setMode(uint8_t mode) {
             marketsRows();
             tickMarkets();
             break;
-        case MODE_CAT:
-            bgKind = BG_BLACK;
-            fb.fillSprite(TFT_BLACK);
-            saveBg();
-            CatMode::enter(&fb, catPush);
-            break;
     }
     batch = false;
     flushAll();
@@ -1225,7 +1212,7 @@ void Display::showMenu(int sel) {
     fb.setTextColor(C_LINE, C_DARK);
     const char* hint = "tap: next    hold 1 s: select";
     fb.drawString(hint, (W - fb.textWidth(hint, 2)) / 2, 250, 2);
-    const int top = 12, step = 29;   // 8 items above the hint (y 250)
+    const int top = 12, step = 29;   // 7 items above the hint (y 250)
     fb.fillRoundRect(12, top + sel * step - 4, W - 24, 27, 6, C_BROWN);
     saveBg();   // the highlight is part of the background so glyphs blend over it
 
@@ -1259,7 +1246,6 @@ void Display::tick() {
         case MODE_SPACE:  tickSpace();  break;
         case MODE_ANALOG: tickAnalog(); break;
         case MODE_PING:   tickPing();   break;
-        case MODE_CAT:    CatMode::tick(); break;
         case MODE_WEATHER: tickWeather(); break;
         case MODE_MARKETS: tickMarkets(); break;
     }

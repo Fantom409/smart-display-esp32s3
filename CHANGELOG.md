@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Added a Docker Compose build environment with PlatformIO and a persistent local toolchain cache.
+- Removed Cat mode and its bundled eyes engine. Seven display modes remain.
+- Saved Weather and Markets selections are preserved; a saved Cat selection falls back to Clock.
+- Mode IDs are now 0–6 (Weather: 5, Markets: 6).
+
 ## 2.1.0 — PlatformIO rewrite
 
 A full rewrite of the original Arduino IDE sketch (1.0.x). Same hardware idea, same web

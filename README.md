@@ -1,7 +1,7 @@
 # Smart Display
 
 A desk clock and info panel on an **ESP32-S3 Super Mini** with a **1.69" ST7789 240×280** display:
-eight display modes, live weather and crypto prices, a touch button, and a web interface
+seven display modes, live weather and crypto prices, a touch button, and a web interface
 that shows a live snapshot of the screen.
 
 <p align="center">
@@ -23,7 +23,6 @@ that shows a live snapshot of the screen.
 | <img src="docs/screens/mode_space.png" width="120"> | **Space** | Starfield flight with a digital clock |
 | <img src="docs/screens/mode_analog.png" width="120"> | **Analog** | Chronograph dial: skeleton hands, date window, month and weekday |
 | <img src="docs/screens/mode_ping.png" width="120"> | **Ping** | DNS + TCP + HTTP latency to a host, once per second, with statistics |
-| <img src="docs/screens/mode_cat.png" width="120"> | **Cat** | Animated cat eyes with random emotions |
 | <img src="docs/screens/mode_weather.png" width="120"> | **Weather** | Modern layout: time, condition, max/min, feels-like, humidity, pressure, wind, rain chance, UV, sunrise/sunset |
 | <img src="docs/screens/mode_markets.png" width="120"> | **Markets** | Modern layout: six coins with a 24 h hourly chart, price, change and turnover |
 
@@ -86,7 +85,30 @@ page, **System → Firmware update**, and upload `smart-display-ota.bin`.
 
 ## Build from source
 
-Requires [PlatformIO](https://platformio.org/).
+With Docker and Docker Compose:
+
+```bash
+docker compose run --rm --build platformio
+```
+
+The image includes [PlatformIO Core 6.2.0](https://pypi.org/project/platformio/6.2.0/).
+The first build downloads the ESP32 toolchain and libraries; subsequent builds reuse
+the cache in `.pio/core/`. Build output is available on the host in `.pio/build/supermini/`.
+
+On Linux, if your user/group IDs differ from 1000, run with your IDs so the container
+can write build files into the checkout:
+
+```bash
+LOCAL_UID=$(id -u) LOCAL_GID=$(id -g) docker compose run --rm --build platformio
+```
+
+Pass PlatformIO commands after the service name, for example:
+
+```bash
+docker compose run --rm platformio run -t clean
+```
+
+Alternatively, install [PlatformIO](https://platformio.org/) locally:
 
 ```bash
 pio run -t upload
@@ -136,7 +158,7 @@ you see exactly what the device shows right now. On the right:
 
 <img src="docs/screens/web_modes.png" width="560" alt="Modes">
 
-All eight display modes as cards with a short description; the active one is highlighted.
+All seven display modes as cards with a short description; the active one is highlighted.
 A click switches the mode without reloading the page. The **Ping** card below sets the host that
 the Ping mode measures (default `google.com`).
 
@@ -180,7 +202,7 @@ BTC, ETH, BNB, SOL, XRP, ADA. A coin with no Bybit spot pair is shown as a dash.
 |---|---|
 | `GET /screen.bmp` | Current frame as a 240×280 BMP |
 | `GET /api/status` | Mode, network, memory, weather — JSON |
-| `POST /mode` | `mode=0..7` switches the display |
+| `POST /mode` | `mode=0..6` switches the display |
 | `POST /update` | OTA firmware upload |
 
 ## Data sources
@@ -217,7 +239,6 @@ src/
   Settings.*      NVS-backed settings
   TimeZone.*      SNTP and POSIX time zone
   Controls.*      touch button and gestures
-  CatMode.*       cat mode; eyes/ holds the eye engine
   Diag.*          reboot diagnostics
   assets/         fonts and bitmaps (generated headers)
 tools/
@@ -230,13 +251,11 @@ docs/
 
 ## Credits
 
-- Cat eyes: based on the esp32-eyes engine © 2020 Luis Llamas (AGPL-3.0), see `src/eyes/`
 - [TFT_eSPI](https://github.com/Bodmer/TFT_eSPI), [ArduinoJson](https://arduinojson.org/),
   [PNGdec](https://github.com/bitbank2/PNGdec)
 
 ## License
 
-[GNU AGPL-3.0](LICENSE). The cat eyes engine this project builds on is AGPL-3.0, so the whole
-firmware is released under the same license: you may use, modify and redistribute it, but any
+[GNU AGPL-3.0](LICENSE). The firmware is released under this license: you may use, modify and redistribute it, but any
 modified version you distribute (or run as a network service) must publish its source under
 AGPL-3.0 too and keep the credits above.

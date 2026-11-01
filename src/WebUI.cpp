@@ -31,11 +31,11 @@ static String pv(const String& real, const char* fake) { return demo ? String(fa
 
 // Mode titles and descriptions — same order as DisplayMode
 static const char* MODE_TITLE[MODE_COUNT] = {"Clock", "Crypto", "Space", "Analog",
-                                             "Ping", "Cat", "Weather", "Markets"};
+                                             "Ping", "Weather", "Markets"};
 static const char* MODE_DESC[MODE_COUNT] = {
     "Classic: time, date, weather",  "Classic: 6 prices and a clock",
     "Starfield flight and time",     "Chronograph with hands",
-    "Latency to a site every second", "Eyes with random emotions",
+    "Latency to a site every second",
     "Modern: all the weather data",  "Modern prices with a 24 h chart"};
 
 // ------------------------------------------------------------------ style

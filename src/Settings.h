@@ -13,7 +13,6 @@ enum DisplayMode : uint8_t {
     MODE_SPACE,
     MODE_ANALOG,
     MODE_PING,
-    MODE_CAT,          // cat eyes with random emotions
     MODE_WEATHER,      // modern weather: all the data
     MODE_MARKETS,      // modern crypto: 24 h chart, turnover
     MODE_COUNT
