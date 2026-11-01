@@ -1,7 +1,26 @@
 services:
   platformio:
-    build: .
+    build:
+      context: .
+      target: platformio
     init: true
     user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     volumes:
       - .:/project
+
+  esp-emulator:
+    build:
+      context: .
+      target: esp-emulator
+    profiles: [emulator]
+    init: true
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+    depends_on:
+      platformio:
+        condition: service_completed_successfully
+    ports:
+      - "127.0.0.1:${EMULATOR_PORT:-18080}:18080"
+    volumes:
+      - .:/project
+    stop_signal: SIGINT
+    stop_grace_period: 30s

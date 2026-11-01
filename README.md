@@ -125,6 +125,38 @@ pio run -t upload
 After the first flash, later updates can go over Wi-Fi: **System → Firmware update** in the web
 interface (upload `.pio/build/supermini/firmware.bin`).
 
+### Run without a board
+
+Start Espressif's **esp-emulator v0.51.0** with Docker Compose (Linux amd64/arm64
+images; Docker Desktop also runs these Linux containers):
+
+```bash
+docker compose up --build -d esp-emulator
+docker compose logs -f esp-emulator
+```
+
+This builds the firmware first, then boots an emulated ESP32-S3 with 2 MB PSRAM.
+Open <http://localhost:18080/wifi> and provision SSID `myssid`, password
+`mypassword` (the emulator's virtual Wi-Fi network). After the firmware reboots,
+the dashboard is at <http://localhost:18080/>. The port is bound to localhost;
+set `EMULATOR_PORT` to use another host port. Use `LOCAL_UID`/`LOCAL_GID` as
+described above if your Linux IDs differ from 1000.
+
+```bash
+docker compose stop esp-emulator
+```
+
+Emulated flash and its matching ELF are kept in `.pio/emulator/`; settings
+survive stops and container recreation. To load a new firmware build or clear
+settings, stop the emulator, delete `.pio/emulator/`, then start it again.
+The service is in the `emulator` profile, so ordinary `docker compose up` runs
+only the firmware build.
+
+The web UI and `/screen.bmp` provide the display preview; the emulator does not
+visualize the physical ST7789 panel. See the
+[compatibility report](docs/emulator-compatibility.md) for verified behavior,
+limitations, and native launch commands.
+
 ## First setup
 
 1. On first boot the device starts an open access point **`SmartDisplay`**.

@@ -1,3 +1,5 @@
 # The image installs tools only; Compose mounts the project at runtime.
 *
 !Dockerfile
+!tools/
+!tools/run-emulator.sh
