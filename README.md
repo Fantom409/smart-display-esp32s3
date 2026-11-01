@@ -52,6 +52,14 @@ Never connect a Li-ion cell (up to 4.2 V) to 3V3. Full pin table: [`docs/pinout.
 | CS | GPIO 13 | | | |
 | BLK | GPIO 9 | | | |
 
+## Enclosure
+
+STL files for the enclosure are in [`hardware/stl/`](hardware/stl/):
+
+- [Body](hardware/stl/Body.stl)
+- [Back cover](hardware/stl/back_cover.stl)
+- [Front cover](hardware/stl/front+cover.stl)
+
 ## Flash the firmware — no software to install
 
 All you need is **Google Chrome or Microsoft Edge** on a computer (Windows, macOS or Linux)
@@ -247,6 +255,8 @@ tools/
 docs/
   pinout.html     wiring diagram
   screens/        screenshots
+hardware/
+  stl/            enclosure body, back cover and front cover
 ```
 
 ## Credits
